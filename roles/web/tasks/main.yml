@@ -1,11 +1,18 @@
 ---
 
+- name: Install iUS community package
+  yum: name=http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-13.ius.centos6.noarch.rpm state=present
+
 # httpd is handled by the base-apache role upstream
-- name: Install php and git 
+- name: Install php and git
   yum: name={{ item }} state=present
   with_items:
-   - php
-   - php-mysql
+   - php55u
+   - php55u-mysql
+   - php55u-apcu
+   - php55u-pecl-memcache
+   - php55u-gd
+   - php55u-mbstring
    - git
 
 - name: Configure SELinux to allow httpd to connect to remote database
@@ -14,3 +21,6 @@
 
 - name: Copy the code from repository
   git: repo={{ repository }} version={{ webapp_version }} dest=/var/www/html/
+
+- name: http service restart
+  service: name=httpd state=restarted
