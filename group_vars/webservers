@@ -14,4 +14,7 @@ iface: '{{ ansible_default_ipv4.interface }}'
 repository: https://github.com/beeman/webapp-php-test.git
 
 # this is the sha1sum of V5 of the test webapp.
-webapp_version: 35537ebd08366d1d8e780de602cb3f56ce03db80
+webapp_version: master
+
+# this is the target location of the webapp
+webapp_target: /opt/webapp/

@@ -4,9 +4,10 @@ web2
 
 [dbservers]
 db1
+zabbix
 
 [lbservers]
 lb1
 
 [monitoring]
-nagios
+zabbix

@@ -1,0 +1,31 @@
+---
+# This will install zabbix
+
+- name: install zabbix
+  yum: pkg={{ item }} state=present
+  with_items:
+   - zabbix22-server-mysql
+   - zabbix22-web-mysql
+   - zabbix22-dbfiles-mysql
+   - MySQL-python
+  notify: restart httpd
+
+- name: Create zabbix DB User
+  mysql_user: name={{ zabbix_dbuser }} host={{ item }} password={{ zabbix_dbpass }} priv=*.*:ALL state=present
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+    - "%"
+
+- name: Create zabbix database
+  mysql_db: name={{ zabbix_dbname }} state=present
+  notify: import zabbix data
+
+- name: configure zabbix-server
+  template: src=zabbix_server.conf.j2 dest=/etc/zabbix_server.conf
+  notify: restart zabbix-server
+
+- name: start zabbix
+  service: name=zabbix-server state=started enabled=yes

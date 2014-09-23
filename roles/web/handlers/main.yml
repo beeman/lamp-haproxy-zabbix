@@ -1,0 +1,5 @@
+---
+# Handler to handle web tier notifications
+
+- name: restart httpd
+  service: name=httpd state=restarted
